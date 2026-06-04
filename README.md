@@ -1,5 +1,7 @@
 # 🎮 EPlay — Loja de games
 
+> 🧩 **O que este projeto comprova:** React, TypeScript, Redux (gerenciamento de estado global), consumo de API e arquitetura de e-commerce com componentização.
+
 E-commerce de jogos desenvolvido no módulo de React da EBAC. Uma SPA com catálogo de games, página inicial com banners e destaques, e navegação por categorias — focada em componentização e estilização com CSS-in-JS.
 
 ## 🛠️ Tecnologias
