@@ -1,73 +1,45 @@
-# React + TypeScript + Vite
+# 🎮 EPlay — Loja de games
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> 🧩 **O que este projeto comprova:** React, TypeScript, Redux (gerenciamento de estado global), consumo de API e arquitetura de e-commerce com componentização.
 
-Currently, two official plugins are available:
+E-commerce de jogos desenvolvido no módulo de React da EBAC. Uma SPA com catálogo de games, página inicial com banners e destaques, e navegação por categorias — focada em componentização e estilização com CSS-in-JS.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🛠️ Tecnologias
 
-## React Compiler
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)
+![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✨ Funcionalidades
 
-## Expanding the ESLint configuration
+- 🏠 **Home** com banner e listas de produtos (destaques / em breve)
+- 🗂️ **Página de categorias** com listagem de jogos
+- 🧩 **Componentes reutilizáveis**: `Banner`, `Button`, `Header`, `Product`, `ProductList`, `Tag`
+- 🎨 Estilização com **Styled Components** e tema centralizado
+- 🧭 Navegação entre páginas com **React Router**
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Como rodar
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev      # ambiente de desenvolvimento
+npm run build    # build de produção
+npm run preview  # pré-visualizar a build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📁 Estrutura
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+src/
+├── components/   # Banner, Button, Header, Product, ProductList, Tag
+├── pages/        # Home, Categories
+├── models/       # tipos/modelos de dados
+├── routes.tsx    # rotas da aplicação
+└── styles.ts     # estilos globais
+```
+
+---
+
+> 📚 Projeto de estudos — módulo React (EBAC).
