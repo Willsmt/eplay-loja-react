@@ -1,37 +1,23 @@
-import type { GalleryItem } from '../../pages/Home'
-import zelda from '../../assets/images/zelda.png'
-import play from '../../assets/images/botao-play_1.png'
-import zoom from '../../assets/images/mais_zoom_1.png'
 import Section from '../Section'
 import { Items, Item, Action, Modal, ModalContent } from './styles'
-
-import fechar from '../../assets/images/close.png'
 import { useState } from 'react'
+import type { GalleryItem } from '../../pages/Home'
 
-const mock: GalleryItem[] = [
-  {
-    type: 'image',
-    url: zelda
-  },
-  {
-    type: 'image',
-    url: zelda
-  },
-  {
-    type: 'video',
-    url: 'https://www.youtube.com/embed/QdBZY2fkU-0?si=2_ckNrN-P3kMMdwo'
-  }
-]
+import play from '../../assets/images/botao-play_1.png'
+import zoom from '../../assets/images/mais_zoom_1.png'
+import fechar from '../../assets/images/close.png'
 
 type Props = {
-  defaulCover: string
+  defaultCover: string
   name: string
+  gallery: GalleryItem[] // agora recebemos direto da API
 }
 
 interface ModalState extends GalleryItem {
   isVisible: boolean
 }
-const Gallery = ({ defaulCover, name }: Props) => {
+
+const Gallery = ({ defaultCover, name, gallery }: Props) => {
   const [modal, setModal] = useState<ModalState>({
     isVisible: false,
     type: 'image',
@@ -40,13 +26,14 @@ const Gallery = ({ defaulCover, name }: Props) => {
 
   const getMediaCover = (item: GalleryItem) => {
     if (item.type === 'image') return item.url
-    return defaulCover
+    return defaultCover
   }
 
   const getMediaIcon = (item: GalleryItem) => {
     if (item.type === 'image') return zoom
     return play
   }
+
   const fecharModal = () => {
     setModal({
       isVisible: false,
@@ -59,16 +46,16 @@ const Gallery = ({ defaulCover, name }: Props) => {
     <>
       <Section background="black" title="Galeria">
         <Items>
-          {mock.map((media, index) => (
+          {gallery.map((media, index) => (
             <Item
               key={media.url}
-              onClick={() => {
+              onClick={() =>
                 setModal({
                   isVisible: true,
                   type: media.type,
                   url: media.url
                 })
-              }}
+              }
             >
               <img
                 src={getMediaCover(media)}
@@ -81,16 +68,14 @@ const Gallery = ({ defaulCover, name }: Props) => {
           ))}
         </Items>
       </Section>
+
       <Modal className={modal.isVisible ? 'Visible' : ''}>
         <ModalContent className="container">
           <header>
             <h4>{name}</h4>
-            <img
-              src={fechar}
-              alt="Ícone de fechar"
-              onClick={() => fecharModal()}
-            />
+            <img src={fechar} alt="Fechar" onClick={fecharModal} />
           </header>
+
           {modal.type === 'image' ? (
             <img src={modal.url} alt={`Mídia selecionada de ${name}`} />
           ) : (
@@ -105,7 +90,7 @@ const Gallery = ({ defaulCover, name }: Props) => {
             />
           )}
         </ModalContent>
-        <div className="overlay" onClick={() => fecharModal()}></div>
+        <div className="overlay" onClick={fecharModal}></div>
       </Modal>
     </>
   )

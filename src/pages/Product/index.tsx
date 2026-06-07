@@ -1,52 +1,55 @@
-// import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import Gallery from '../../components/Gallery'
 import Hero from '../../components/Hero'
 import Section from '../../components/Section'
-
-import resident from '../../assets/images/resident.png'
+import type { Game } from '../Home'
 
 const Product = () => {
-  // const { id } = useParams<{ id: string }>()
+  const { id } = useParams<{ id: string }>()
+  const [game, setGame] = useState<Game | null>(null)
 
-  // Aqui você pode usar o id para buscar dados do produto
-  // Exemplo: chamar uma API ou filtrar de uma lista
+  useEffect(() => {
+    if (id) {
+      fetch(`https://api-ebac.vercel.app/api/eplay/jogos/${id}`)
+        .then(res => res.json())
+        .then(setGame)
+    }
+  }, [id])
+
+  if (!game) {
+    return <h3>Carregando...</h3>
+  }
 
   return (
     <div>
-      <Hero />
+      <Hero game={game} />
+
       <Section background="black" title="Sobre o jogo">
-        <p>
-          Hogwarts Legacy é um RPG de ação imersivo e de mundo aberto ambientado
-          no mundo introduzido pela primeira vez nos livros do Harry Potter.
-          Embarque em uma jornada por locais novos e familiares enquanto explora
-          e descubra animais fantásticos, personalize seu personagem e crie
-          poções, domine o lançamento de feitiços, aprimore talentos e torne-se
-          o bruxo que deseja ser.Experimente Hogwarts da década de 1800. Seu
-          personagem é um estudante com chave de um antigo segredo que ameaça
-          destruir o mundo bruxo. Faça aliados, lute contra os bruxos das trevas
-          e decida o destino do mundo bruxo. Seu legado é o que você faz dele.
-          Viva o Inesperado.
-        </p>
+        <p>{game.description}</p>
       </Section>
+
       <Section background="gray" title="Detalhes do jogo">
         <p>
-          <strong>Plataforma:</strong> PlayStation 5
+          <strong>Plataforma:</strong> {game.details.system}
         </p>
         <p>
-          <strong>Desenvolvedor:</strong> Avalanche Software
+          <strong>Desenvolvedor:</strong> {game.details.developer}
         </p>
         <p>
-          <strong>Editora:</strong> Portkey Games, subsidiária da Warner Bros.
-          Interactive Entertainment
+          <strong>Editora:</strong> {game.details.publisher}
         </p>
         <p>
-          <strong>Idiomas:</strong> O jogo oferece suporte a diversos idiomas,
-          incluindo inglês, espanhol, francês, alemão, italiano, português,
-          entre outros. As opções de áudio e legendas podem ser ajustadas nas
-          configurações do jogo.
+          <strong>Idiomas:</strong> o jogo oferece suporte a diversos idiomas,
+          incluindo {game.details.languages.join(', ')}
         </p>
       </Section>
-      <Gallery defaulCover={resident} name="jogo teste" />
+
+      <Gallery
+        defaultCover={game.media.cover}
+        name={game.name}
+        gallery={game.media.gallery}
+      />
     </div>
   )
 }

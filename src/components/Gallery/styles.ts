@@ -92,7 +92,9 @@ export const ModalContent = styled.div`
     font-size: 18px;
     font-weight: bold;
   }
-
+  > img {
+    width: 100%;
+  }
   img,
   iframe {
     display: block;

@@ -14,6 +14,10 @@ const Banner = () => {
       .then(res => setDestaque(res))
   }, [])
 
+  if (!destaque) {
+    return <h3>Carregando...</h3>
+  }
+
   return (
     <Imagem style={{ backgroundImage: `url(${destaque?.media.cover})` }}>
       <div className="container">
@@ -31,7 +35,7 @@ const Banner = () => {
         )}
         <Button
           type="link"
-          to={`/produto/${destaque?.id}`}
+          to={`/product/${destaque?.id}`}
           title="clique aqui para aproveitar esta oferta"
         >
           Aproveitar
