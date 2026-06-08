@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import type { Props } from '.'
-import { breakpoints, cores } from '../../styles'
+import { cores } from '../../styles'
 import { Card } from '../ProductCard/styles'
 
 export const Container = styled.section<Omit<Props, 'title' | 'games'>>`
@@ -11,6 +11,27 @@ export const Container = styled.section<Omit<Props, 'title' | 'games'>>`
   ${Card} {
     background-color: ${props =>
       props.background === 'black' ? `${cores.cinza} ` : `${cores.preta} `};
+  }
+
+  // --- carrossel (tablet/celular) ---
+  .swiper {
+    margin-top: 40px;
+    // espaço para os bullets de paginação não cobrirem os cards
+    padding-bottom: 32px;
+  }
+
+  // slides com a mesma altura, deixando o card preencher tudo
+  .swiper-slide {
+    height: auto;
+    display: flex;
+  }
+
+  .swiper-pagination-bullet {
+    background-color: ${cores.branca};
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: ${cores.verde};
   }
 `
 
@@ -25,14 +46,6 @@ export const List = styled.ul`
   // cada item estica para a altura da linha, fazendo o card preencher tudo
   li {
     display: flex;
-  }
-
-  @media (max-width: ${breakpoints.tablet}) {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  @media (max-width: ${breakpoints.celular}) {
-    grid-template-columns: 1fr;
   }
 `
 
