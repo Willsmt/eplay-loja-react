@@ -5,6 +5,7 @@ import { GlobalCss } from './styles'
 import Footer from './components/Footer'
 import Cart from './components/Cart'
 import ScrollToHash from './components/ScrollToHash'
+import BackToTop from './components/BackToTop'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Rotas />
       <Footer />
       <Cart />
+      <BackToTop />
     </BrowserRouter>
   )
 }
