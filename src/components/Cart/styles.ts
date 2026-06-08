@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { cores } from '../../styles'
+import { breakpoints, cores } from '../../styles'
 
 type ContainerProps = {
   isOpen: boolean
@@ -42,6 +42,11 @@ export const Sidebar = styled.aside<ContainerProps>`
   // desliza a partir da direita
   transform: ${props => (props.isOpen ? 'translateX(0)' : 'translateX(100%)')};
   transition: transform 0.3s ease;
+
+  @media (max-width: ${breakpoints.celular}) {
+    width: 100%;
+    padding: 16px;
+  }
 `
 
 export const CartHeader = styled.header`
@@ -83,6 +88,11 @@ export const CartItem = styled.li`
     height: 80px;
     object-fit: cover;
     border-radius: 4px;
+
+    @media (max-width: ${breakpoints.celular}) {
+      width: 60px;
+      height: 60px;
+    }
   }
 
   > div {

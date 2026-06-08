@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { cores } from '../../styles'
+import { breakpoints, cores } from '../../styles'
 
 export const Container = styled.footer`
   background-color: ${cores.cinza};
@@ -14,6 +14,7 @@ export const SectionTitle = styled.h4`
 
 export const Links = styled.ul`
   display: flex;
+  flex-wrap: wrap;
   margin-top: 16px;
 `
 
@@ -31,4 +32,8 @@ export const Link = styled.a`
 
 export const FooterSection = styled.div`
   margin-bottom: 64px;
+
+  @media (max-width: ${breakpoints.celular}) {
+    margin-bottom: 32px;
+  }
 `

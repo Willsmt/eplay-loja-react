@@ -1,8 +1,14 @@
 import styled from 'styled-components'
-import { cores } from '../../styles'
+import { breakpoints, cores } from '../../styles'
 
 export const Items = styled.ul`
   display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  @media (max-width: ${breakpoints.celular}) {
+    gap: 8px;
+  }
 `
 
 export const Action = styled.div`
@@ -26,7 +32,6 @@ export const Action = styled.div`
 `
 
 export const Item = styled.li`
-  margin-right: 16px;
   position: relative;
   overflow: hidden;
 
@@ -37,6 +42,11 @@ export const Item = styled.li`
     height: 150px;
     object-fit: cover;
     transition: transform 0.3s ease-in-out;
+
+    @media (max-width: ${breakpoints.celular}) {
+      width: 100px;
+      height: 100px;
+    }
   }
 
   &:hover {
@@ -105,5 +115,13 @@ export const ModalContent = styled.div`
     width: 100%;
     height: 480px;
     border: none;
+
+    @media (max-width: ${breakpoints.tablet}) {
+      height: 360px;
+    }
+
+    @media (max-width: ${breakpoints.celular}) {
+      height: 220px;
+    }
   }
 `

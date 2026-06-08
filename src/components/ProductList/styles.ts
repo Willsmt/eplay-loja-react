@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import type { Props } from '.'
-import { cores } from '../../styles'
+import { breakpoints, cores } from '../../styles'
 import { Card } from '../ProductCard/styles'
 
 export const Container = styled.section<Omit<Props, 'title' | 'games'>>`
@@ -25,6 +25,14 @@ export const List = styled.ul`
   // cada item estica para a altura da linha, fazendo o card preencher tudo
   li {
     display: flex;
+  }
+
+  @media (max-width: ${breakpoints.tablet}) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: ${breakpoints.celular}) {
+    grid-template-columns: 1fr;
   }
 `
 

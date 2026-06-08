@@ -9,6 +9,12 @@ export const cores = {
   vermelha: '#fa0303'
 }
 
+// pontos de quebra para responsividade
+export const breakpoints = {
+  tablet: '768px',
+  celular: '480px'
+}
+
 export const GlobalCss = createGlobalStyle`
 *{
 margin:0;
@@ -29,6 +35,14 @@ margin-top: 40px;
   max-width: 1024px;
   width: 100%;
   margin: 0 auto;
+
+  @media (max-width: ${breakpoints.tablet}) {
+    max-width: 80%;
+  }
+
+  @media (max-width: ${breakpoints.celular}) {
+    max-width: 90%;
+  }
 }
 
 `
