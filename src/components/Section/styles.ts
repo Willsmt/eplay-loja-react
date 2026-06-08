@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { cores } from '../../styles'
-import { Card } from '../Product/styles'
+import { Card } from '../ProductCard/styles'
 
 interface SectionStyleProps {
   background: 'black' | 'gray'

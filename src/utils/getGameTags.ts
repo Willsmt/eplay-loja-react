@@ -1,4 +1,4 @@
-import type { Game } from '../pages/Home'
+import type { Game } from '../types'
 import { formataPreco } from './formatPrice'
 
 export const getGameTags = (game: Game) => {

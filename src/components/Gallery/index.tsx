@@ -1,7 +1,7 @@
 import Section from '../Section'
 import { Items, Item, Action, Modal, ModalContent } from './styles'
 import { useState } from 'react'
-import type { GalleryItem } from '../../pages/Home'
+import type { GalleryItem } from '../../types'
 
 import play from '../../assets/images/botao-play_1.png'
 import zoom from '../../assets/images/mais_zoom_1.png'
@@ -80,7 +80,6 @@ const Gallery = ({ defaultCover, name, gallery }: Props) => {
             <img src={modal.url} alt={`Mídia selecionada de ${name}`} />
           ) : (
             <iframe
-              frameBorder={0}
               src={modal.url}
               title={`Vídeo de ${name}`}
               width="100%"

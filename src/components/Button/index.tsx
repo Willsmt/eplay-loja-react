@@ -1,31 +1,43 @@
 import { ButtonContainer, ButttonLink } from './styles'
+import { type ButtonHTMLAttributes } from 'react'
 
-export type Props = {
-  type: 'button' | 'link'
-  title: string
-  to?: string
-  onClick?: () => void
+type BaseProps = {
   children: string
   variant?: 'primary' | 'secondary'
+  title: string
 }
 
-const Button = ({ type, title, to, onClick, children, variant }: Props) => {
-  if (type === 'button') {
+// Botão HTML
+type ButtonProps = BaseProps & {
+  type: 'button'
+  onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick']
+}
+
+// Link (react-router-dom)
+type LinkProps = BaseProps & {
+  type: 'link'
+  to: string
+}
+
+export type Props = ButtonProps | LinkProps
+
+const Button = (props: Props) => {
+  if (props.type === 'button') {
     return (
       <ButtonContainer
         type="button"
-        title={title}
-        onClick={onClick}
-        variant={variant}
+        title={props.title}
+        onClick={props.onClick}
+        variant={props.variant}
       >
-        {children}
+        {props.children}
       </ButtonContainer>
     )
   }
 
   return (
-    <ButttonLink to={to as string} title={title}>
-      {children}
+    <ButttonLink to={props.to} title={props.title}>
+      {props.children}
     </ButttonLink>
   )
 }

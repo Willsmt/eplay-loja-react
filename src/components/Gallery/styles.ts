@@ -104,5 +104,6 @@ export const ModalContent = styled.div`
   iframe {
     width: 100%;
     height: 480px;
+    border: none;
   }
 `

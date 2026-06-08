@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import type { Props } from '.'
 import { cores } from '../../styles'
-import { Card } from '../Product/styles'
+import { Card } from '../ProductCard/styles'
 
 export const Container = styled.section<Omit<Props, 'title' | 'games'>>`
   padding: 32px 0;
@@ -18,8 +18,14 @@ export const List = styled.ul`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 24px;
+  align-items: stretch;
 
   margin-top: 40px;
+
+  // cada item estica para a altura da linha, fazendo o card preencher tudo
+  li {
+    display: flex;
+  }
 `
 
 export const Title = styled.h2`

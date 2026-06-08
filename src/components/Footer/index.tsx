@@ -1,4 +1,5 @@
-import { Container, SectionTitle, FooterSection, Link, Links } from './styled'
+import { Container, SectionTitle, FooterSection, Link, Links } from './styles'
+import { categoriesConfig } from '../../config/categoriesConfig'
 
 const currentYear = new Date().getFullYear()
 
@@ -8,31 +9,15 @@ const Footer = () => (
       <FooterSection>
         <SectionTitle>Categorias</SectionTitle>
         <Links>
-          <li>
-            <Link>RPG</Link>
-          </li>
-          <li>
-            <Link>Ação</Link>
-          </li>
-          <li>
-            <Link>Aventura</Link>
-          </li>
-          <li>
-            <Link>Esportes</Link>
-          </li>
-          <li>
-            <Link>Simulação</Link>
-          </li>
-          <li>
-            <Link>Estratégia</Link>
-          </li>
-          <li>
-            <Link>FPS</Link>
-          </li>
+          {categoriesConfig.map(categoria => (
+            <li key={categoria.key}>
+              <Link>{categoria.title}</Link>
+            </li>
+          ))}
         </Links>
       </FooterSection>
       <FooterSection>
-        <SectionTitle>Acesso rapido</SectionTitle>
+        <SectionTitle>Acesso rápido</SectionTitle>
         <Links>
           <li>
             <Link>Novidades</Link>

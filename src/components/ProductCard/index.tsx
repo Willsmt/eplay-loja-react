@@ -11,7 +11,7 @@ type Props = {
   id: number
 }
 
-const Product = ({
+const ProductCard = ({
   title,
   category,
   system,
@@ -43,4 +43,4 @@ const Product = ({
   )
 }
 
-export default Product
+export default ProductCard
