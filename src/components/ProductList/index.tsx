@@ -8,11 +8,12 @@ export type Props = {
   background: 'gray' | 'black'
   games?: Game[]
   isLoading?: boolean
+  id?: string
 }
 
-const ProductList = ({ background, title, games, isLoading }: Props) => {
+const ProductList = ({ background, title, games, isLoading, id }: Props) => {
   return (
-    <Container background={background}>
+    <Container id={id} background={background}>
       <div className="container">
         <Title>{title}</Title>
         {isLoading && <p>Carregando...</p>}

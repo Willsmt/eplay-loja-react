@@ -12,6 +12,7 @@ const Categories = () => {
       {categoriesConfig.map(categoria => (
         <ProductList
           key={categoria.key}
+          id={categoria.key}
           title={categoria.title}
           background={categoria.background}
           games={data?.[categoria.key]}

@@ -4,11 +4,13 @@ import Header from './components/Header'
 import { GlobalCss } from './styles'
 import Footer from './components/Footer'
 import Cart from './components/Cart'
+import ScrollToHash from './components/ScrollToHash'
 
 function App() {
   return (
     <BrowserRouter>
       <GlobalCss />
+      <ScrollToHash />
       <div className="container">
         <Header />
       </div>

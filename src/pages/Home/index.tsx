@@ -11,12 +11,14 @@ const Home = () => {
     <>
       <Banner />
       <ProductList
+        id="promocoes"
         games={promocoes}
         title="Promoções"
         background="gray"
         isLoading={carregandoPromocoes}
       />
       <ProductList
+        id="em-breve"
         games={emBreve}
         title="Em breve"
         background="black"

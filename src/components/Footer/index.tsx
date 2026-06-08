@@ -11,7 +11,7 @@ const Footer = () => (
         <Links>
           {categoriesConfig.map(categoria => (
             <li key={categoria.key}>
-              <Link>{categoria.title}</Link>
+              <Link to={`/categories#${categoria.key}`}>{categoria.title}</Link>
             </li>
           ))}
         </Links>
@@ -20,13 +20,13 @@ const Footer = () => (
         <SectionTitle>Acesso rápido</SectionTitle>
         <Links>
           <li>
-            <Link>Novidades</Link>
+            <Link to="/">Novidades</Link>
           </li>
           <li>
-            <Link>Promoções</Link>
+            <Link to="/#promocoes">Promoções</Link>
           </li>
           <li>
-            <Link>Em breve</Link>
+            <Link to="/#em-breve">Em breve</Link>
           </li>
         </Links>
       </FooterSection>

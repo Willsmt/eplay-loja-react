@@ -19,13 +19,13 @@ const Header = () => {
         <nav>
           <Links>
             <LinksItem>
-              <Link to={'/categories'}>Categorias</Link>
+              <Link to="/categories">Categorias</Link>
             </LinksItem>
             <LinksItem>
-              <a href="#">Novidades</a>
+              <Link to="/#em-breve">Novidades</Link>
             </LinksItem>
             <LinksItem>
-              <a href="#">Promoções</a>
+              <Link to="/#promocoes">Promoções</Link>
             </LinksItem>
           </Links>
         </nav>
