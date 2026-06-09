@@ -2,6 +2,40 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import type { Game } from '../types'
 import { categoriesConfig } from '../config/categoriesConfig'
 
+type Product = {
+  id: number
+  price: number
+}
+
+type PurchasePayload = {
+  products: Product[]
+  billing: {
+    name: string
+    email: string
+    document: string
+  }
+  delivery: {
+    email: string
+  }
+  payment: {
+    card: {
+      active: boolean
+      owner?: {
+        name: string
+        document: string
+      }
+      name?: string
+      number?: string
+      expires?: {
+        month: number
+        year: number
+      }
+      code?: number
+    }
+    installments: number
+  }
+}
+
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
@@ -40,6 +74,13 @@ export const api = createApi({
     }),
     getDestaque: builder.query<Game, void>({
       query: () => 'destaque'
+    }),
+    purchase: builder.mutation<any, PurchasePayload>({
+      query: body => ({
+        url: 'checkout',
+        method: 'POST',
+        body
+      })
     })
   })
 })
@@ -49,5 +90,6 @@ export const {
   useGetEmBreveQuery,
   useGetCategoriesQuery,
   useGetGameQuery,
-  useGetDestaqueQuery
+  useGetDestaqueQuery,
+  usePurchaseMutation
 } = api
