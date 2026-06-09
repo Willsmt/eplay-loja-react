@@ -17,8 +17,10 @@ const cartSlice = createSlice({
   reducers: {
     addItem: (state, action: PayloadAction<Game>) => {
       // evita adicionar o mesmo jogo duas vezes
-      const jaExiste = state.items.find(item => item.id === action.payload.id)
-      if (!jaExiste) {
+      const alreadyExists = state.items.find(
+        item => item.id === action.payload.id
+      )
+      if (!alreadyExists) {
         state.items.push(action.payload)
       }
       // ao adicionar, abrimos o carrinho automaticamente

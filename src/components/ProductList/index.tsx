@@ -21,7 +21,7 @@ export type Props = {
 const ProductList = ({ background, title, games, isLoading, id }: Props) => {
   // carrossel só no tablet/celular; no desktop mantemos a grade
   const isMobile = useMediaQuery(`(max-width: ${breakpoints.tablet})`)
-  const lista = games ?? []
+  const list = games ?? []
 
   const renderCard = (game: Game) => (
     <ProductCard
@@ -52,13 +52,13 @@ const ProductList = ({ background, title, games, isLoading, id }: Props) => {
               481: { slidesPerView: 2 }
             }}
           >
-            {lista.map(game => (
+            {list.map(game => (
               <SwiperSlide key={game.id}>{renderCard(game)}</SwiperSlide>
             ))}
           </Swiper>
         ) : (
           <List>
-            {lista.map(game => (
+            {list.map(game => (
               <li key={game.id}>{renderCard(game)}</li>
             ))}
           </List>

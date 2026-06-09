@@ -9,13 +9,13 @@ const Categories = () => {
   return (
     <>
       <Banner />
-      {categoriesConfig.map(categoria => (
+      {categoriesConfig.map(category => (
         <ProductList
-          key={categoria.key}
-          id={categoria.key}
-          title={categoria.title}
-          background={categoria.background}
-          games={data?.[categoria.key]}
+          key={category.key}
+          id={category.key}
+          title={category.title}
+          background={category.background}
+          games={data?.[category.key]}
           isLoading={isLoading}
         />
       ))}

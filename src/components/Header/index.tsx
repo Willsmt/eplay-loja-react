@@ -1,25 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  HeaderBar,
-  HamburgerButton,
-  HeaderLeft,
-  HeaderRight,
-  Links,
-  LinksItem,
-  LinkCart,
-  CartBadge,
-  CategoriasMenu,
-  CategoriasTrigger,
-  Dropdown,
-  Overlay,
-  Drawer,
-  DrawerHeader,
-  CloseButton,
-  DrawerGroupTitle,
-  DrawerList
-} from './styles'
+import * as S from './styles'
 import { type RootState } from '../../store'
 import { openCart } from '../../store/reducers/cart'
 import { categoriesConfig } from '../../config/categoriesConfig'
@@ -29,103 +11,103 @@ import carrinho from '../../assets/images/carrinho.svg'
 const Header = () => {
   const dispatch = useDispatch()
   const items = useSelector((state: RootState) => state.cart.items)
-  const [menuAberto, setMenuAberto] = useState(false)
-  const [drawerAberto, setDrawerAberto] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
-  const fecharMenu = () => setMenuAberto(false)
-  const fecharDrawer = () => setDrawerAberto(false)
+  const closeMenu = () => setMenuOpen(false)
+  const closeDrawer = () => setDrawerOpen(false)
 
   // fecha o dropdown de categorias (desktop) ao clicar fora dele
   useEffect(() => {
-    if (!menuAberto) return
+    if (!menuOpen) return
 
-    const handleClickFora = (evento: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(evento.target as Node)) {
-        setMenuAberto(false)
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false)
       }
     }
 
-    document.addEventListener('mousedown', handleClickFora)
-    return () => document.removeEventListener('mousedown', handleClickFora)
-  }, [menuAberto])
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [menuOpen])
 
   // enquanto o drawer está aberto: trava o scroll da página e fecha com Esc
   useEffect(() => {
-    if (!drawerAberto) return
+    if (!drawerOpen) return
 
-    const handleEsc = (evento: KeyboardEvent) => {
-      if (evento.key === 'Escape') setDrawerAberto(false)
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setDrawerOpen(false)
     }
 
     document.body.style.overflow = 'hidden'
-    document.addEventListener('keydown', handleEsc)
+    document.addEventListener('keydown', handleEscape)
     return () => {
       document.body.style.overflow = ''
-      document.removeEventListener('keydown', handleEsc)
+      document.removeEventListener('keydown', handleEscape)
     }
-  }, [drawerAberto])
+  }, [drawerOpen])
 
   return (
-    <HeaderBar>
-      <HamburgerButton
+    <S.HeaderBar>
+      <S.HamburgerButton
         type="button"
         aria-label="Abrir menu"
-        onClick={() => setDrawerAberto(true)}
+        onClick={() => setDrawerOpen(true)}
       >
         ☰
-      </HamburgerButton>
+      </S.HamburgerButton>
 
-      <HeaderLeft>
+      <S.HeaderLeft>
         <Link to="/">
           <img src={logo} alt="EPLAY" />
         </Link>
         <nav>
-          <Links>
-            <LinksItem>
-              <CategoriasMenu ref={menuRef}>
-                <CategoriasTrigger
+          <S.Links>
+            <S.LinksItem>
+              <S.CategoriesMenu ref={menuRef}>
+                <S.CategoriesTrigger
                   type="button"
                   aria-label="Ver categorias"
-                  aria-expanded={menuAberto}
-                  onClick={() => setMenuAberto(valor => !valor)}
+                  aria-expanded={menuOpen}
+                  onClick={() => setMenuOpen(valor => !valor)}
                 >
                   Categorias ☰
-                </CategoriasTrigger>
+                </S.CategoriesTrigger>
 
-                {menuAberto && (
-                  <Dropdown>
+                {menuOpen && (
+                  <S.Dropdown>
                     <li>
-                      <Link to="/categories" onClick={fecharMenu}>
+                      <Link to="/categories" onClick={closeMenu}>
                         Todas as categorias
                       </Link>
                     </li>
-                    {categoriesConfig.map(categoria => (
-                      <li key={categoria.key}>
+                    {categoriesConfig.map(category => (
+                      <li key={category.key}>
                         <Link
-                          to={`/categories#${categoria.key}`}
-                          onClick={fecharMenu}
+                          to={`/categories#${category.key}`}
+                          onClick={closeMenu}
                         >
-                          {categoria.title}
+                          {category.title}
                         </Link>
                       </li>
                     ))}
-                  </Dropdown>
+                  </S.Dropdown>
                 )}
-              </CategoriasMenu>
-            </LinksItem>
-            <LinksItem>
+              </S.CategoriesMenu>
+            </S.LinksItem>
+            <S.LinksItem>
               <Link to="/#em-breve">Novidades</Link>
-            </LinksItem>
-            <LinksItem>
+            </S.LinksItem>
+            <S.LinksItem>
               <Link to="/#promocoes">Promoções</Link>
-            </LinksItem>
-          </Links>
+            </S.LinksItem>
+          </S.Links>
         </nav>
-      </HeaderLeft>
+      </S.HeaderLeft>
 
-      <HeaderRight>
-        <LinkCart
+      <S.HeaderRight>
+        <S.LinkCart
           href="#"
           aria-label={`Carrinho com ${items.length} ${
             items.length === 1 ? 'produto' : 'produtos'
@@ -136,59 +118,56 @@ const Header = () => {
           }}
         >
           <img src={carrinho} alt="Carrinho" />
-          <CartBadge>{items.length}</CartBadge>
-        </LinkCart>
-      </HeaderRight>
+          <S.CartBadge>{items.length}</S.CartBadge>
+        </S.LinkCart>
+      </S.HeaderRight>
 
       {/* Menu lateral (drawer) — mobile/tablet */}
-      <Overlay isOpen={drawerAberto} onClick={fecharDrawer} />
-      <Drawer isOpen={drawerAberto} aria-hidden={!drawerAberto}>
-        <DrawerHeader>
-          <CloseButton
+      <S.Overlay isOpen={drawerOpen} onClick={closeDrawer} />
+      <S.Drawer isOpen={drawerOpen} aria-hidden={!drawerOpen}>
+        <S.DrawerHeader>
+          <S.CloseButton
             type="button"
             aria-label="Fechar menu"
-            onClick={fecharDrawer}
+            onClick={closeDrawer}
           >
             ✕
-          </CloseButton>
-        </DrawerHeader>
+          </S.CloseButton>
+        </S.DrawerHeader>
 
-        <DrawerGroupTitle>Categorias</DrawerGroupTitle>
-        <DrawerList>
+        <S.DrawerGroupTitle>Categorias</S.DrawerGroupTitle>
+        <S.DrawerList>
           <li>
-            <Link to="/categories" onClick={fecharDrawer}>
+            <Link to="/categories" onClick={closeDrawer}>
               Todas as categorias
             </Link>
           </li>
-        </DrawerList>
-        <DrawerList className="sub">
-          {categoriesConfig.map(categoria => (
-            <li key={categoria.key}>
-              <Link
-                to={`/categories#${categoria.key}`}
-                onClick={fecharDrawer}
-              >
-                {categoria.title}
+        </S.DrawerList>
+        <S.DrawerList className="sub">
+          {categoriesConfig.map(category => (
+            <li key={category.key}>
+              <Link to={`/categories#${category.key}`} onClick={closeDrawer}>
+                {category.title}
               </Link>
             </li>
           ))}
-        </DrawerList>
+        </S.DrawerList>
 
-        <DrawerGroupTitle>Navegar</DrawerGroupTitle>
-        <DrawerList>
+        <S.DrawerGroupTitle>Navegar</S.DrawerGroupTitle>
+        <S.DrawerList>
           <li>
-            <Link to="/#em-breve" onClick={fecharDrawer}>
+            <Link to="/#em-breve" onClick={closeDrawer}>
               Novidades
             </Link>
           </li>
           <li>
-            <Link to="/#promocoes" onClick={fecharDrawer}>
+            <Link to="/#promocoes" onClick={closeDrawer}>
               Promoções
             </Link>
           </li>
-        </DrawerList>
-      </Drawer>
-    </HeaderBar>
+        </S.DrawerList>
+      </S.Drawer>
+    </S.HeaderBar>
   )
 }
 

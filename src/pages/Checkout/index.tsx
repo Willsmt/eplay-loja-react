@@ -131,10 +131,10 @@ const Checkout = () => {
     }
   })
 
-  const getErrorMessage = (campo: string, mensagem?: string) => {
-    const estaAlterado = campo in form.touched
-    const temErro = campo in form.errors
-    if (estaAlterado && temErro) return mensagem
+  const getErrorMessage = (field: string, message?: string) => {
+    const isTouched = field in form.touched
+    const hasError = field in form.errors
+    if (isTouched && hasError) return message
     return ''
   }
 

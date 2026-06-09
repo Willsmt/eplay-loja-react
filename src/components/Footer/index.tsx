@@ -9,9 +9,9 @@ const Footer = () => (
       <FooterSection>
         <SectionTitle>Categorias</SectionTitle>
         <Links>
-          {categoriesConfig.map(categoria => (
-            <li key={categoria.key}>
-              <Link to={`/categories#${categoria.key}`}>{categoria.title}</Link>
+          {categoriesConfig.map(category => (
+            <li key={category.key}>
+              <Link to={`/categories#${category.key}`}>{category.title}</Link>
             </li>
           ))}
         </Links>

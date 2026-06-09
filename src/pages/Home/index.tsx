@@ -1,28 +1,28 @@
 import Banner from '../../components/Banner'
 import ProductList from '../../components/ProductList'
-import { useGetPromocoesQuery, useGetEmBreveQuery } from '../../services/api'
+import { useGetOnSaleQuery, useGetComingSoonQuery } from '../../services/api'
 
 const Home = () => {
-  const { data: promocoes, isLoading: carregandoPromocoes } =
-    useGetPromocoesQuery()
-  const { data: emBreve, isLoading: carregandoEmBreve } = useGetEmBreveQuery()
+  const { data: onSale, isLoading: loadingOnSale } = useGetOnSaleQuery()
+  const { data: comingSoon, isLoading: loadingComingSoon } =
+    useGetComingSoonQuery()
 
   return (
     <>
       <Banner />
       <ProductList
         id="promocoes"
-        games={promocoes}
+        games={onSale}
         title="Promoções"
         background="gray"
-        isLoading={carregandoPromocoes}
+        isLoading={loadingOnSale}
       />
       <ProductList
         id="em-breve"
-        games={emBreve}
+        games={comingSoon}
         title="Em breve"
         background="black"
-        isLoading={carregandoEmBreve}
+        isLoading={loadingComingSoon}
       />
     </>
   )

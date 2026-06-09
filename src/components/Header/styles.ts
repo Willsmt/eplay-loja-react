@@ -1,12 +1,12 @@
 import styled from 'styled-components'
-import { breakpoints, cores } from '../../styles'
+import { breakpoints, colors } from '../../styles'
 
 type DrawerProps = {
   isOpen: boolean
 }
 
 export const HeaderBar = styled.header`
-  background-color: ${cores.cinza};
+  background-color: ${colors.gray};
   padding: 24px;
   border-radius: 16px;
   margin-bottom: 80px;
@@ -17,7 +17,7 @@ export const HeaderBar = styled.header`
   position: relative;
 
   a {
-    color: ${cores.branca};
+    color: ${colors.white};
     text-decoration: none;
     font-weight: bold;
   }
@@ -35,7 +35,7 @@ export const HamburgerButton = styled.button`
   display: none;
   background: none;
   border: none;
-  color: ${cores.branca};
+  color: ${colors.white};
   font-size: 24px;
   line-height: 1;
   cursor: pointer;
@@ -95,8 +95,8 @@ export const LinkCart = styled.a`
 `
 
 export const CartBadge = styled.span`
-  background-color: ${cores.verde};
-  color: ${cores.branca};
+  background-color: ${colors.green};
+  color: ${colors.white};
   font-size: 12px;
   font-weight: bold;
   border-radius: 999px;
@@ -109,7 +109,7 @@ export const CartBadge = styled.span`
 `
 
 // agrupa o link "Categorias" + o botão e ancora o dropdown (desktop)
-export const CategoriasMenu = styled.div`
+export const CategoriesMenu = styled.div`
   position: relative;
   display: flex;
   align-items: center;
@@ -117,13 +117,13 @@ export const CategoriasMenu = styled.div`
 `
 
 // gatilho "Categorias ☰" que abre o dropdown (não navega)
-export const CategoriasTrigger = styled.button`
+export const CategoriesTrigger = styled.button`
   display: flex;
   align-items: center;
   gap: 8px;
   background: none;
   border: none;
-  color: ${cores.branca};
+  color: ${colors.white};
   font-family: inherit;
   font-size: 16px;
   font-weight: bold;
@@ -139,7 +139,7 @@ export const Dropdown = styled.ul`
   left: 0;
   margin-top: 8px;
   min-width: 160px;
-  background-color: ${cores.preta};
+  background-color: ${colors.black};
   border-radius: 8px;
   padding: 8px;
   z-index: 10;
@@ -155,7 +155,7 @@ export const Dropdown = styled.ul`
     white-space: nowrap;
 
     &:hover {
-      background-color: ${cores.cinza};
+      background-color: ${colors.gray};
     }
   }
 `
@@ -181,7 +181,7 @@ export const Drawer = styled.aside<DrawerProps>`
   height: 100%;
   width: 260px;
   max-width: 80%;
-  background-color: ${cores.cinza};
+  background-color: ${colors.gray};
   padding: 24px;
   z-index: 30;
   transform: translateX(${props => (props.isOpen ? '0' : '-100%')});
@@ -200,7 +200,7 @@ export const DrawerHeader = styled.div`
 export const CloseButton = styled.button`
   background: none;
   border: none;
-  color: ${cores.branca};
+  color: ${colors.white};
   font-size: 24px;
   line-height: 1;
   cursor: pointer;
@@ -212,7 +212,7 @@ export const DrawerGroupTitle = styled.span`
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: ${cores.cinzaClaro};
+  color: ${colors.lightGray};
   margin: 16px 0 4px;
 `
 
@@ -230,13 +230,13 @@ export const DrawerList = styled.ul`
     font-weight: bold;
 
     &:hover {
-      background-color: ${cores.preta};
+      background-color: ${colors.black};
     }
   }
 
   &.sub a {
     font-weight: normal;
     padding-left: 20px;
-    color: ${cores.cinzaClaro};
+    color: ${colors.lightGray};
   }
 `

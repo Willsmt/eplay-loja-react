@@ -1,5 +1,5 @@
 import { BrowserRouter } from 'react-router-dom'
-import Rotas from './routes'
+import AppRoutes from './routes'
 import Header from './components/Header'
 import { GlobalCss } from './styles'
 import Footer from './components/Footer'
@@ -15,7 +15,7 @@ function App() {
       <div className="container">
         <Header />
       </div>
-      <Rotas />
+      <AppRoutes />
       <Footer />
       <Cart />
       <BackToTop />

@@ -42,28 +42,28 @@ export const api = createApi({
     baseUrl: 'https://api-ebac.vercel.app/api/eplay'
   }),
   endpoints: builder => ({
-    getPromocoes: builder.query<Game[], void>({
+    getOnSale: builder.query<Game[], void>({
       query: () => 'promocoes'
     }),
-    getEmBreve: builder.query<Game[], void>({
+    getComingSoon: builder.query<Game[], void>({
       query: () => 'em-breve'
     }),
     // busca todas as categorias do config em paralelo, em uma única query
     getCategories: builder.query<Record<string, Game[]>, void>({
       async queryFn(_arg, _queryApi, _extraOptions, baseQuery) {
-        const resultados = await Promise.all(
-          categoriesConfig.map(categoria => baseQuery(categoria.key))
+        const results = await Promise.all(
+          categoriesConfig.map(category => baseQuery(category.key))
         )
 
         // se qualquer categoria falhar, propaga o erro
-        const comErro = resultados.find(resultado => resultado.error)
-        if (comErro?.error) {
-          return { error: comErro.error }
+        const failed = results.find(result => result.error)
+        if (failed?.error) {
+          return { error: failed.error }
         }
 
         const data: Record<string, Game[]> = {}
-        categoriesConfig.forEach((categoria, indice) => {
-          data[categoria.key] = resultados[indice].data as Game[]
+        categoriesConfig.forEach((category, index) => {
+          data[category.key] = results[index].data as Game[]
         })
 
         return { data }
@@ -72,7 +72,7 @@ export const api = createApi({
     getGame: builder.query<Game, string>({
       query: id => `jogos/${id}`
     }),
-    getDestaque: builder.query<Game, void>({
+    getFeatured: builder.query<Game, void>({
       query: () => 'destaque'
     }),
     purchase: builder.mutation<any, PurchasePayload>({
@@ -86,10 +86,10 @@ export const api = createApi({
 })
 
 export const {
-  useGetPromocoesQuery,
-  useGetEmBreveQuery,
+  useGetOnSaleQuery,
+  useGetComingSoonQuery,
   useGetCategoriesQuery,
   useGetGameQuery,
-  useGetDestaqueQuery,
+  useGetFeaturedQuery,
   usePurchaseMutation
 } = api

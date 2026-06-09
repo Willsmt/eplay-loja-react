@@ -5,7 +5,7 @@ import Categories from './pages/Categories'
 import Product from './pages/Product'
 import Checkout from './pages/Checkout'
 
-const Rotas = () => (
+const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<Home />} />
     <Route path="/categories" element={<Categories />} />
@@ -14,4 +14,4 @@ const Rotas = () => (
   </Routes>
 )
 
-export default Rotas
+export default AppRoutes

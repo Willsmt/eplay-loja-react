@@ -34,7 +34,7 @@ const Gallery = ({ defaultCover, name, gallery }: Props) => {
     return play
   }
 
-  const fecharModal = () => {
+  const closeModal = () => {
     setModal({
       isVisible: false,
       type: 'image',
@@ -73,7 +73,7 @@ const Gallery = ({ defaultCover, name, gallery }: Props) => {
         <ModalContent className="container">
           <header>
             <h4>{name}</h4>
-            <img src={fechar} alt="Fechar" onClick={fecharModal} />
+            <img src={fechar} alt="Fechar" onClick={closeModal} />
           </header>
 
           {modal.type === 'image' ? (
@@ -89,7 +89,7 @@ const Gallery = ({ defaultCover, name, gallery }: Props) => {
             />
           )}
         </ModalContent>
-        <div className="overlay" onClick={fecharModal}></div>
+        <div className="overlay" onClick={closeModal}></div>
       </Modal>
     </>
   )

@@ -1,5 +1,5 @@
 import type { Game } from '../types'
-import { formataPreco } from './formatPrice'
+import { formatPrice } from './formatPrice'
 
 export const getGameTags = (game: Game) => {
   const tags = []
@@ -13,7 +13,7 @@ export const getGameTags = (game: Game) => {
   }
 
   if (game.prices.current) {
-    tags.push(formataPreco(game.prices.current))
+    tags.push(formatPrice(game.prices.current))
   }
   return tags
 }

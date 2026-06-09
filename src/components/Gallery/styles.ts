@@ -1,12 +1,12 @@
 import styled from 'styled-components'
-import { breakpoints, cores } from '../../styles'
+import { breakpoints, colors } from '../../styles'
 
 export const Items = styled.ul`
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
 
-  @media (max-width: ${breakpoints.celular}) {
+  @media (max-width: ${breakpoints.mobile}) {
     gap: 8px;
   }
 `
@@ -36,14 +36,14 @@ export const Item = styled.li`
   overflow: hidden;
 
   > img {
-    border: 2px solid ${cores.branca};
+    border: 2px solid ${colors.white};
     border-radius: 8px;
     width: 150px;
     height: 150px;
     object-fit: cover;
     transition: transform 0.3s ease-in-out;
 
-    @media (max-width: ${breakpoints.celular}) {
+    @media (max-width: ${breakpoints.mobile}) {
       width: 100px;
       height: 100px;
     }
@@ -120,7 +120,7 @@ export const ModalContent = styled.div`
       height: 360px;
     }
 
-    @media (max-width: ${breakpoints.celular}) {
+    @media (max-width: ${breakpoints.mobile}) {
       height: 220px;
     }
   }

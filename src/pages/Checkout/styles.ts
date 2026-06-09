@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { breakpoints, cores } from '../../styles'
+import { breakpoints, colors } from '../../styles'
 
 type InputGroupProps = {
   maxWidth?: string
@@ -23,7 +23,7 @@ export const Row = styled.div<RowProps>`
     row-gap: 16px;
   }
 
-  @media (max-width: ${breakpoints.celular}) {
+  @media (max-width: ${breakpoints.mobile}) {
     flex-direction: column;
     align-items: stretch;
     row-gap: 16px;
@@ -35,36 +35,36 @@ export const InputGroup = styled.div<InputGroupProps>`
 
   max-width: ${props => props.maxWidth || 'none'};
 
-  @media (max-width: ${breakpoints.celular}) {
+  @media (max-width: ${breakpoints.mobile}) {
     max-width: 100%;
   }
 
   label {
     font-size: 14px;
     margin-bottom: 8px;
-    color: ${cores.branca};
+    color: ${colors.white};
     display: block;
   }
 
   input,
   select {
-    color: ${cores.preta};
-    background-color: ${cores.branca};
+    color: ${colors.black};
+    background-color: ${colors.white};
     height: 32px;
     padding: 0 8px;
-    border: 1px solid ${cores.branca};
+    border: 1px solid ${colors.white};
     width: 100%;
     transition: border-color 0.2s ease-in-out;
   }
 
   input:focus {
     outline: none;
-    border-color: ${cores.cinza};
+    border-color: ${colors.gray};
   }
 
   select,
   option {
-    color: ${cores.preta};
+    color: ${colors.black};
   }
 
   small {
@@ -80,8 +80,8 @@ export const TabButton = styled.button<TabButtonProps>`
   border-radius: 8px;
   font-size: 14px;
   font-weight: bold;
-  color: ${cores.branca};
-  background-color: ${props => (props.isActive ? cores.verde : cores.preta)};
+  color: ${colors.white};
+  background-color: ${props => (props.isActive ? colors.green : colors.black)};
   height: 32px;
   border: none;
   margin-right: 16px;
@@ -92,7 +92,7 @@ export const TabButton = styled.button<TabButtonProps>`
     margin-right: 8px;
   }
 
-  @media (max-width: ${breakpoints.celular}) {
+  @media (max-width: ${breakpoints.mobile}) {
     width: 100%;
     margin-right: 0;
     display: flex;

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { breakpoints, cores } from '../../styles'
+import { breakpoints, colors } from '../../styles'
 
 type ContainerProps = {
   isOpen: boolean
@@ -28,8 +28,8 @@ export const Overlay = styled.div`
 export const Sidebar = styled.aside<ContainerProps>`
   position: relative;
   z-index: 1;
-  background-color: ${cores.preta};
-  color: ${cores.branca};
+  background-color: ${colors.black};
+  color: ${colors.white};
   width: 400px;
   max-width: 100%;
   height: 100vh;
@@ -43,7 +43,7 @@ export const Sidebar = styled.aside<ContainerProps>`
   transform: ${props => (props.isOpen ? 'translateX(0)' : 'translateX(100%)')};
   transition: transform 0.3s ease;
 
-  @media (max-width: ${breakpoints.celular}) {
+  @media (max-width: ${breakpoints.mobile}) {
     width: 100%;
     padding: 16px;
   }
@@ -63,7 +63,7 @@ export const CartHeader = styled.header`
   button {
     background: none;
     border: none;
-    color: ${cores.branca};
+    color: ${colors.white};
     font-size: 18px;
     cursor: pointer;
   }
@@ -78,7 +78,7 @@ export const CartItem = styled.li`
   display: flex;
   align-items: center;
   gap: 12px;
-  background-color: ${cores.cinza};
+  background-color: ${colors.gray};
   padding: 8px;
   border-radius: 8px;
   margin-bottom: 12px;
@@ -89,7 +89,7 @@ export const CartItem = styled.li`
     object-fit: cover;
     border-radius: 4px;
 
-    @media (max-width: ${breakpoints.celular}) {
+    @media (max-width: ${breakpoints.mobile}) {
       width: 60px;
       height: 60px;
     }
@@ -108,7 +108,7 @@ export const CartItem = styled.li`
   button {
     background: none;
     border: none;
-    color: ${cores.branca};
+    color: ${colors.white};
     font-size: 16px;
     cursor: pointer;
     align-self: flex-start;
@@ -120,7 +120,7 @@ export const Tags = styled.div`
   gap: 8px;
 `
 
-export const Quantidade = styled.p`
+export const Quantity = styled.p`
   font-size: 14px;
   margin-bottom: 8px;
 `
@@ -132,10 +132,10 @@ export const Total = styled.p`
   font-size: 16px;
 `
 
-export const Parcelas = styled.span`
+export const Installments = styled.span`
   display: block;
   font-size: 12px;
-  color: ${cores.cinzaClaro};
+  color: ${colors.lightGray};
   margin-bottom: 16px;
 `
 
@@ -149,8 +149,8 @@ export const CartFooter = styled.footer`
     padding: 12px;
     border-radius: 8px;
     border: none;
-    background-color: ${cores.vermelha};
-    color: ${cores.branca};
+    background-color: ${colors.red};
+    color: ${colors.white};
     font-weight: bold;
     cursor: pointer;
   }
@@ -158,12 +158,12 @@ export const CartFooter = styled.footer`
   // botão secundário (limpar a lista): discreto, sem preenchimento
   button.secondary {
     background-color: transparent;
-    border: 1px solid ${cores.cinzaClaro};
-    color: ${cores.cinzaClaro};
+    border: 1px solid ${colors.lightGray};
+    color: ${colors.lightGray};
 
     &:hover {
-      border-color: ${cores.branca};
-      color: ${cores.branca};
+      border-color: ${colors.white};
+      color: ${colors.white};
     }
   }
 `
