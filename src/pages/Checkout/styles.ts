@@ -3,7 +3,6 @@ import { cores } from '../../styles'
 
 type InputGroupProps = {
   maxWidth?: string
-  marginTop?: string
 }
 type RowProps = {
   marginTop?: string
@@ -23,7 +22,7 @@ export const Row = styled.div<RowProps>`
 export const InputGroup = styled.div<InputGroupProps>`
   flex: auto;
 
-  max-width: ${props => props.maxWidth || 'auto'};
+  max-width: ${props => props.maxWidth || 'none'};
   label {
     font-size: 14px;
     margin-bottom: 8px;
@@ -33,6 +32,7 @@ export const InputGroup = styled.div<InputGroupProps>`
 
   input,
   select {
+    color: ${cores.preta};
     background-color: ${cores.branca};
     height: 32px;
     padding: 0 8px;
@@ -50,12 +50,20 @@ export const InputGroup = styled.div<InputGroupProps>`
   option {
     color: ${cores.preta};
   }
+
+  small {
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+    color: #ff4d4d;
+    font-weight: bold;
+  }
 `
 
 export const TabButton = styled.button<TabButtonProps>`
   border-radius: 8px;
   font-size: 14px;
-  font-weightl: bold;
+  font-weight: bold;
   color: ${cores.branca};
   background-color: ${props => (props.isActive ? cores.verde : cores.preta)};
   height: 32px;

@@ -9,7 +9,7 @@ type BaseProps = {
 
 // Botão HTML
 type ButtonProps = BaseProps & {
-  type: 'button'
+  type: 'button' | 'submit'
   onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick']
 }
 
@@ -22,23 +22,23 @@ type LinkProps = BaseProps & {
 export type Props = ButtonProps | LinkProps
 
 const Button = (props: Props) => {
-  if (props.type === 'button') {
+  if (props.type === 'link') {
     return (
-      <ButtonContainer
-        type="button"
-        title={props.title}
-        onClick={props.onClick}
-        variant={props.variant}
-      >
+      <ButttonLink to={props.to} title={props.title}>
         {props.children}
-      </ButtonContainer>
+      </ButttonLink>
     )
   }
 
   return (
-    <ButttonLink to={props.to} title={props.title}>
+    <ButtonContainer
+      type={props.type}
+      title={props.title}
+      onClick={props.onClick}
+      variant={props.variant}
+    >
       {props.children}
-    </ButttonLink>
+    </ButtonContainer>
   )
 }
 
