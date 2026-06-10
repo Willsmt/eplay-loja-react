@@ -1,19 +1,24 @@
+import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { type RootState } from '../../store'
 import { removeItem, clearCart, closeCart } from '../../store/reducers/cart'
 import { formatPrice } from '../../utils/formatPrice'
+import { getTotalPrice } from '../../utils/getTotalPrice'
 import Tag from '../Tag'
 import * as S from './styles'
 
 const Cart = () => {
   const dispatch = useDispatch()
   const { items, isOpen } = useSelector((state: RootState) => state.cart)
+  const navigate = useNavigate()
 
   // soma o valor de todos os itens do carrinho
-  const totalPrice = items.reduce(
-    (acc, item) => acc + (item.prices.current ?? 0),
-    0
-  )
+  const totalPrice = getTotalPrice(items)
+
+  const goToCheckout = () => {
+    navigate('/checkout')
+    dispatch(closeCart())
+  }
 
   return (
     <S.CartContainer isOpen={isOpen}>
@@ -64,7 +69,9 @@ const Cart = () => {
             <S.Installments>em até 6x sem juros</S.Installments>
 
             <S.CartFooter>
-              <button type="button">Continuar com a compra</button>
+              <button type="button" onClick={goToCheckout}>
+                Continuar com a compra
+              </button>
               <button
                 type="button"
                 className="secondary"

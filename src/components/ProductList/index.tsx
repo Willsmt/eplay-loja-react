@@ -3,12 +3,12 @@ import { Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
 
-import { type Game } from '../../types'
 import { getGameTags } from '../../utils/getGameTags'
 import { useMediaQuery } from '../../hooks/useMediaQuery'
 import { breakpoints } from '../../styles'
 import ProductCard from '../ProductCard'
 import { Container, List, Title } from './styles'
+import Loader from '../Loader'
 
 export type Props = {
   title: string
@@ -34,7 +34,9 @@ const ProductList = ({ background, title, games, isLoading, id }: Props) => {
       infos={getGameTags(game)}
     />
   )
-
+  if (isLoading) {
+    return <Loader />
+  }
   return (
     <Container id={id} background={background}>
       <div className="container">

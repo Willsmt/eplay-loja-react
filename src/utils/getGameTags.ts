@@ -1,4 +1,3 @@
-import type { Game } from '../types'
 import { formatPrice } from './formatPrice'
 
 export const getGameTags = (game: Game) => {

@@ -1,19 +1,38 @@
 import Button from '../../components/Button'
 import Card from '../../components/Card'
-import { Row, InputGroup, TabButton } from './styles'
+import { Row, InputGroup, TabButton, DemoBox } from './styles'
 
 import credit from '../../assets/images/credit-card.png'
 import codeBar from '../../assets/images/codigoBarras.png'
 import { useFormik } from 'formik'
+import { useEffect, useMemo } from 'react'
+import { InputMask } from '@react-input/mask'
 
 import * as Yup from 'yup'
 import { usePurchaseMutation } from '../../services/api'
+import { Navigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { type RootState } from '../../store'
+import { clearCart } from '../../store/reducers/cart'
+import { formatPrice } from '../../utils/formatPrice'
+import { getTotalPrice } from '../../utils/getTotalPrice'
+
+type Installment = {
+  quantity: number
+  amount: number
+  formattedAmount: string
+}
+
+// conta só os dígitos de um valor mascarado (ex: "123.456.789-00" -> 11)
+const onlyDigits = (value = '') => value.replace(/\D/g, '')
 
 const Checkout = () => {
-  // REMOVIDO: const [payWithCard, setPayWithCard] = useState(false)
-  // O Formik vai gerenciar esse estado agora!
+  const dispatch = useDispatch()
   const [purchase, { isLoading, isError, data, isSuccess }] =
     usePurchaseMutation()
+  const { items } = useSelector((state: RootState) => state.cart)
+
+  const totalPrice = getTotalPrice(items)
   const form = useFormik({
     initialValues: {
       payWithCard: false, // <-- ADICIONADO AQUI
@@ -32,7 +51,7 @@ const Checkout = () => {
       installments: '1'
     },
     validationSchema: Yup.object({
-      payWithCard: Yup.boolean(), // <-- DECLARADO AQUI PARA O YUP RECONHECER
+      payWithCard: Yup.boolean(),
 
       fullName: Yup.string()
         .required('Nome completo é obrigatório')
@@ -42,7 +61,7 @@ const Checkout = () => {
         .email('Digite um e-mail válido'),
       cpf: Yup.string()
         .required('CPF é obrigatório')
-        .matches(/^\d{11}$/, 'CPF deve ter 11 dígitos'),
+        .test('cpf', 'CPF deve ter 11 dígitos', value => onlyDigits(value).length === 11),
       deliveryEmail: Yup.string()
         .required('E-mail de entrega é obrigatório')
         .email('Digite um e-mail válido'),
@@ -50,14 +69,21 @@ const Checkout = () => {
         .oneOf([Yup.ref('deliveryEmail')], 'Os e-mails não conferem')
         .required('Confirme o e-mail'),
 
-      // Validações condicionais agora vão funcionar!
+      // os campos do cartão só são obrigatórios quando o pagamento é no cartão
       cardOwner: Yup.string().when('payWithCard', {
         is: true,
         then: schema => schema.required('Nome do titular é obrigatório')
       }),
       cpfOwner: Yup.string().when('payWithCard', {
         is: true,
-        then: schema => schema.required('CPF do titular é obrigatório')
+        then: schema =>
+          schema
+            .required('CPF do titular é obrigatório')
+            .test(
+              'cpfOwner',
+              'CPF deve ter 11 dígitos',
+              value => onlyDigits(value).length === 11
+            )
       }),
       cardDisplayName: Yup.string().when('payWithCard', {
         is: true,
@@ -68,28 +94,32 @@ const Checkout = () => {
         then: schema =>
           schema
             .required('Número do cartão é obrigatório')
-            .matches(/^\d{16}$/, 'Número deve ter 16 dígitos')
+            .test(
+              'cardNumber',
+              'Número deve ter 16 dígitos',
+              value => onlyDigits(value).length === 16
+            )
       }),
       expiresMonth: Yup.string().when('payWithCard', {
         is: true,
         then: schema =>
           schema
             .required('Mês é obrigatório')
-            .matches(/^(0[1-9]|1[0-2])$/, 'Digite um mês válido')
+            .matches(/^(0[1-9]|1[0-2])$/, 'Digite um mês válido (01-12)')
       }),
       expiresYear: Yup.string().when('payWithCard', {
         is: true,
         then: schema =>
           schema
             .required('Ano é obrigatório')
-            .matches(/^\d{4}$/, 'Digite um ano válido')
+            .matches(/^\d{2}$/, 'Digite o ano com 2 dígitos')
       }),
       cardCode: Yup.string().when('payWithCard', {
         is: true,
         then: schema =>
           schema
             .required('CVV é obrigatório')
-            .matches(/^\d{3,4}$/, 'CVV deve ter 3 ou 4 dígitos')
+            .matches(/^\d{3}$/, 'CVV deve ter 3 dígitos')
       }),
       installments: Yup.string().required('Escolha o parcelamento')
     }),
@@ -97,7 +127,7 @@ const Checkout = () => {
     onSubmit: values => {
       purchase({
         billing: {
-          document: values.cpf,
+          document: onlyDigits(values.cpf),
           email: values.email,
           name: values.fullName
         },
@@ -105,42 +135,98 @@ const Checkout = () => {
           email: values.deliveryEmail
         },
         payment: {
-          installments: 1,
-          card: {
-            active: values.payWithCard,
-            code: Number(values.cardCode),
-            name: values.cardDisplayName,
-            number: values.cardNumber,
-            owner: {
-              document: values.cpfOwner,
-              name: values.cardOwner
-            },
-            expires: {
-              month: 1,
-              year: 2026
-            }
-          }
+          installments: Number(values.installments),
+          // no boleto só enviamos active: false; os dados do cartão ficam de fora
+          card: values.payWithCard
+            ? {
+                active: true,
+                code: Number(values.cardCode),
+                name: values.cardDisplayName,
+                number: onlyDigits(values.cardNumber),
+                owner: {
+                  document: onlyDigits(values.cpfOwner),
+                  name: values.cardOwner
+                },
+                expires: {
+                  month: Number(values.expiresMonth),
+                  // o ano é digitado com 2 dígitos (YY), a API espera 4 (YYYY)
+                  year: 2000 + Number(values.expiresYear)
+                }
+              }
+            : { active: false }
         },
-        products: [
-          {
-            id: 1,
-            price: 10
-          }
-        ]
+        // envia os jogos que estão de fato no carrinho
+        products: items.map(item => ({
+          id: item.id,
+          price: item.prices.current ?? 0
+        }))
       })
     }
   })
 
-  const getErrorMessage = (field: string, message?: string) => {
+  // true quando o campo foi tocado e está inválido — usado para a borda vermelha
+  const checkInputHasError = (field: string) => {
     const isTouched = field in form.touched
-    const hasError = field in form.errors
-    if (isTouched && hasError) return message
+    const isInvalid = field in form.errors
+    return isTouched && isInvalid
+  }
+
+  // devolve o texto do erro apenas quando o campo realmente está com erro
+  const getErrorMessage = (field: string, message?: string) => {
+    if (checkInputHasError(field)) return message
     return ''
+  }
+
+  // modo demo: preenche o formulário com dados de teste válidos.
+  // o número 4111 1111 1111 1111 é o cartão de teste padrão (passa no Luhn).
+  const fillTestData = () => {
+    form.setValues({
+      payWithCard: true,
+      fullName: 'João da Silva',
+      email: 'joao.teste@email.com',
+      cpf: '529.982.247-25',
+      deliveryEmail: 'joao.teste@email.com',
+      confirmdeliveryEmail: 'joao.teste@email.com',
+      cardOwner: 'João da Silva',
+      cpfOwner: '529.982.247-25',
+      cardDisplayName: 'JOAO DA SILVA',
+      cardNumber: '4111 1111 1111 1111',
+      expiresMonth: '12',
+      expiresYear: '30',
+      cardCode: '123',
+      installments: '1'
+    })
+  }
+
+  // parcelas são estado derivado do total — calculadas direto com useMemo
+  const installments = useMemo(() => {
+    const installmentsArray: Installment[] = []
+    for (let i = 1; i <= 6; i++) {
+      installmentsArray.push({
+        quantity: i,
+        amount: totalPrice / i,
+        formattedAmount: formatPrice(totalPrice / i)
+      })
+    }
+    return installmentsArray
+  }, [totalPrice])
+
+  // quando a compra é concluída, esvaziamos o carrinho
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(clearCart())
+    }
+  }, [isSuccess, dispatch])
+
+  // guard de carrinho vazio precisa vir DEPOIS de todos os hooks.
+  // exige !isSuccess para não redirecionar antes de mostrar o "Muito obrigado"
+  if (items.length === 0 && !isSuccess) {
+    return <Navigate to="/" />
   }
 
   return (
     <div className="container">
-      {isSuccess ? (
+      {isSuccess && data ? (
         <Card title="Muito obrigado">
           <>
             <p>
@@ -193,6 +279,18 @@ const Checkout = () => {
         </Card>
       ) : (
         <form onSubmit={form.handleSubmit}>
+          <DemoBox>
+            <p>
+              🧪 <strong>Site de estudos</strong> — nenhuma cobrança é feita.
+              Preencha os campos à vontade para testar as máscaras e validações,
+              ou, se preferir, use o botão abaixo para preencher tudo
+              automaticamente com dados de teste.
+            </p>
+            <button type="button" onClick={fillTestData}>
+              Preencher com dados de teste (opcional)
+            </button>
+          </DemoBox>
+
           <Card title="Dados de cobrança">
             <Row>
               <InputGroup>
@@ -204,6 +302,7 @@ const Checkout = () => {
                   value={form.values.fullName}
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
+                  className={checkInputHasError('fullName') ? 'error' : ''}
                 />
                 <small>
                   {getErrorMessage('fullName', form.errors.fullName)}
@@ -218,18 +317,22 @@ const Checkout = () => {
                   value={form.values.email}
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
+                  className={checkInputHasError('email') ? 'error' : ''}
                 />
                 <small>{getErrorMessage('email', form.errors.email)}</small>
               </InputGroup>
               <InputGroup>
                 <label htmlFor="cpf">CPF</label>
-                <input
+                <InputMask
                   id="cpf"
                   name="cpf"
                   type="text"
                   value={form.values.cpf}
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
+                  className={checkInputHasError('cpf') ? 'error' : ''}
+                  mask="___.___.___-__"
+                  replacement={{ _: /\d/ }}
                 />
                 <small>{getErrorMessage('cpf', form.errors.cpf)}</small>
               </InputGroup>
@@ -245,6 +348,7 @@ const Checkout = () => {
                   value={form.values.deliveryEmail}
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
+                  className={checkInputHasError('deliveryEmail') ? 'error' : ''}
                 />
                 <small>
                   {getErrorMessage('deliveryEmail', form.errors.deliveryEmail)}
@@ -259,6 +363,9 @@ const Checkout = () => {
                   value={form.values.confirmdeliveryEmail}
                   onChange={form.handleChange}
                   onBlur={form.handleBlur}
+                  className={
+                    checkInputHasError('confirmdeliveryEmail') ? 'error' : ''
+                  }
                 />
                 <small>
                   {getErrorMessage(
@@ -277,17 +384,17 @@ const Checkout = () => {
               </p>
               <Row>
                 <TabButton
-                  type="button" // <-- PREVINE SUBMISSÃO DO FORM
-                  isActive={!form.values.payWithCard} // <-- USA O ESTADO DO FORMIK
-                  onClick={() => form.setFieldValue('payWithCard', false)} // <-- ATUALIZA O FORMIK
+                  type="button"
+                  isActive={!form.values.payWithCard}
+                  onClick={() => form.setFieldValue('payWithCard', false)}
                 >
                   <img src={codeBar} alt="Pagar com código de barras" />
                   Boleto bancário
                 </TabButton>
                 <TabButton
-                  type="button" // <-- PREVINE SUBMISSÃO DO FORM
-                  isActive={form.values.payWithCard} // <-- USA O ESTADO DO FORMIK
-                  onClick={() => form.setFieldValue('payWithCard', true)} // <-- ATUALIZA O FORMIK
+                  type="button"
+                  isActive={form.values.payWithCard}
+                  onClick={() => form.setFieldValue('payWithCard', true)}
                 >
                   <img src={credit} alt="Pagar com cartão de crédito" />
                   Cartão de crédito
@@ -295,7 +402,6 @@ const Checkout = () => {
               </Row>
 
               <div className="margin-top">
-                {/* LÊ O ESTADO DIRETAMENTE DO FORMIK */}
                 {!form.values.payWithCard && (
                   <p className="margin-top">
                     Ao optar por boleto, a confirmação pode levar até 3 dias
@@ -317,6 +423,9 @@ const Checkout = () => {
                           value={form.values.cardOwner}
                           onChange={form.handleChange}
                           onBlur={form.handleBlur}
+                          className={
+                            checkInputHasError('cardOwner') ? 'error' : ''
+                          }
                         />
                         <small>
                           {getErrorMessage('cardOwner', form.errors.cardOwner)}
@@ -326,13 +435,18 @@ const Checkout = () => {
                         <label htmlFor="cpfOwner">
                           CPF do titular do cartão
                         </label>
-                        <input
+                        <InputMask
                           id="cpfOwner"
                           name="cpfOwner"
                           type="text"
                           value={form.values.cpfOwner}
                           onChange={form.handleChange}
                           onBlur={form.handleBlur}
+                          className={
+                            checkInputHasError('cpfOwner') ? 'error' : ''
+                          }
+                          mask="___.___.___-__"
+                          replacement={{ _: /\d/ }}
                         />
                         <small>
                           {getErrorMessage('cpfOwner', form.errors.cpfOwner)}
@@ -350,6 +464,9 @@ const Checkout = () => {
                           value={form.values.cardDisplayName}
                           onChange={form.handleChange}
                           onBlur={form.handleBlur}
+                          className={
+                            checkInputHasError('cardDisplayName') ? 'error' : ''
+                          }
                         />
                         <small>
                           {getErrorMessage(
@@ -360,13 +477,18 @@ const Checkout = () => {
                       </InputGroup>
                       <InputGroup>
                         <label htmlFor="cardNumber">Número do cartão</label>
-                        <input
+                        <InputMask
                           id="cardNumber"
                           name="cardNumber"
                           type="text"
                           value={form.values.cardNumber}
                           onChange={form.handleChange}
                           onBlur={form.handleBlur}
+                          className={
+                            checkInputHasError('cardNumber') ? 'error' : ''
+                          }
+                          mask="____ ____ ____ ____"
+                          replacement={{ _: /\d/ }}
                         />
                         <small>
                           {getErrorMessage(
@@ -377,13 +499,18 @@ const Checkout = () => {
                       </InputGroup>
                       <InputGroup maxWidth="123px">
                         <label htmlFor="expiresMonth">Mês do vencimento</label>
-                        <input
+                        <InputMask
                           id="expiresMonth"
                           name="expiresMonth"
                           type="text"
                           value={form.values.expiresMonth}
                           onChange={form.handleChange}
                           onBlur={form.handleBlur}
+                          className={
+                            checkInputHasError('expiresMonth') ? 'error' : ''
+                          }
+                          mask="__"
+                          replacement={{ _: /\d/ }}
                         />
                         <small>
                           {getErrorMessage(
@@ -394,13 +521,18 @@ const Checkout = () => {
                       </InputGroup>
                       <InputGroup maxWidth="123px">
                         <label htmlFor="expiresYear">Ano de vencimento</label>
-                        <input
+                        <InputMask
                           id="expiresYear"
                           name="expiresYear"
                           type="text"
                           value={form.values.expiresYear}
                           onChange={form.handleChange}
                           onBlur={form.handleBlur}
+                          className={
+                            checkInputHasError('expiresYear') ? 'error' : ''
+                          }
+                          mask="__"
+                          replacement={{ _: /\d/ }}
                         />
                         <small>
                           {getErrorMessage(
@@ -411,13 +543,18 @@ const Checkout = () => {
                       </InputGroup>
                       <InputGroup maxWidth="48px">
                         <label htmlFor="cardCode">CVV</label>
-                        <input
+                        <InputMask
                           id="cardCode"
                           name="cardCode"
                           type="text"
                           value={form.values.cardCode}
                           onChange={form.handleChange}
                           onBlur={form.handleBlur}
+                          className={
+                            checkInputHasError('cardCode') ? 'error' : ''
+                          }
+                          mask="___"
+                          replacement={{ _: /\d/ }}
                         />
                         <small>
                           {getErrorMessage('cardCode', form.errors.cardCode)}
@@ -435,9 +572,15 @@ const Checkout = () => {
                           onChange={form.handleChange}
                           onBlur={form.handleBlur}
                         >
-                          <option value="1">1x de R$ 200,00</option>
-                          <option value="2">2x de R$ 200,00</option>
-                          <option value="3">3x de R$ 200,00</option>
+                          {installments.map(installment => (
+                            <option
+                              key={installment.quantity}
+                              value={installment.quantity}
+                            >
+                              {installment.quantity}x de{' '}
+                              {installment.formattedAmount}
+                            </option>
+                          ))}
                         </select>
                       </InputGroup>
                     </Row>
@@ -447,12 +590,26 @@ const Checkout = () => {
             </div>
           </Card>
 
+          {isError && (
+            <p
+              style={{
+                color: '#ff4d4d',
+                fontWeight: 'bold',
+                marginTop: '16px'
+              }}
+            >
+              Ocorreu um erro ao processar sua compra. Confira os dados e tente
+              novamente.
+            </p>
+          )}
+
           <Button
             type="submit"
             title="Clique aqui para finalizar a compra"
             variant="primary"
+            disabled={isLoading}
           >
-            Finalizar compra
+            {isLoading ? 'Finalizando compra...' : 'Finalizar Compra'}
           </Button>
         </form>
       )}

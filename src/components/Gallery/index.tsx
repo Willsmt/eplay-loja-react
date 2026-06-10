@@ -1,11 +1,10 @@
 import Section from '../Section'
 import { Items, Item, Action, Modal, ModalContent } from './styles'
 import { useState } from 'react'
-import type { GalleryItem } from '../../types'
 
 import play from '../../assets/images/botao-play_1.png'
 import zoom from '../../assets/images/mais_zoom_1.png'
-import fechar from '../../assets/images/close.png'
+import close from '../../assets/images/close.png'
 
 type Props = {
   defaultCover: string
@@ -73,7 +72,7 @@ const Gallery = ({ defaultCover, name, gallery }: Props) => {
         <ModalContent className="container">
           <header>
             <h4>{name}</h4>
-            <img src={fechar} alt="Fechar" onClick={closeModal} />
+            <img src={close} alt="Fechar" onClick={closeModal} />
           </header>
 
           {modal.type === 'image' ? (

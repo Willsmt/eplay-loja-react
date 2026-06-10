@@ -3,13 +3,14 @@ import Gallery from '../../components/Gallery'
 import Hero from '../../components/Hero'
 import Section from '../../components/Section'
 import { useGetGameQuery } from '../../services/api'
+import Loader from '../../components/Loader'
 
 const Product = () => {
   const { id } = useParams<{ id: string }>()
   const { data: game, isLoading } = useGetGameQuery(id ?? '', { skip: !id })
 
   if (isLoading || !game) {
-    return <h3>Carregando...</h3>
+    return <Loader />
   }
 
   return (

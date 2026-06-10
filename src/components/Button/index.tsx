@@ -5,6 +5,7 @@ type BaseProps = {
   children: string
   variant?: 'primary' | 'secondary'
   title: string
+  disabled?: boolean
 }
 
 // Botão HTML
@@ -36,6 +37,7 @@ const Button = (props: Props) => {
       title={props.title}
       onClick={props.onClick}
       variant={props.variant}
+      disabled={props.disabled}
     >
       {props.children}
     </ButtonContainer>

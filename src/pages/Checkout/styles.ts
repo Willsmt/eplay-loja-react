@@ -62,6 +62,11 @@ export const InputGroup = styled.div<InputGroupProps>`
     border-color: ${colors.gray};
   }
 
+  input.error,
+  select.error {
+    border-color: #ff4d4d;
+  }
+
   select,
   option {
     color: ${colors.black};
@@ -73,6 +78,30 @@ export const InputGroup = styled.div<InputGroupProps>`
     font-size: 12px;
     color: #ff4d4d;
     font-weight: bold;
+  }
+`
+
+// banner do modo demo (site de estudos) com botão de autopreenchimento
+export const DemoBox = styled.div`
+  background-color: ${colors.gray};
+  border: 1px dashed ${colors.green};
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+  font-size: 14px;
+
+  p {
+    margin-bottom: 12px;
+  }
+
+  button {
+    background-color: ${colors.green};
+    color: ${colors.white};
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-weight: bold;
+    cursor: pointer;
   }
 `
 

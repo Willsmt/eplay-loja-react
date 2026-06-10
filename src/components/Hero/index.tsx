@@ -2,7 +2,6 @@ import Button from '../Button'
 import Tag from '../Tag'
 import { Banner, Infos } from './styles'
 import { formatPrice } from '../../utils/formatPrice'
-import type { Game } from '../../types'
 import { useDispatch } from 'react-redux'
 import { addItem } from '../../store/reducers/cart'
 
