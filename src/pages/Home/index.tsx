@@ -1,11 +1,27 @@
 import Banner from '../../components/Banner'
 import ProductList from '../../components/ProductList'
+import Message from '../../components/Message'
 import { useGetOnSaleQuery, useGetComingSoonQuery } from '../../services/api'
 
 const Home = () => {
-  const { data: onSale, isLoading: loadingOnSale } = useGetOnSaleQuery()
-  const { data: comingSoon, isLoading: loadingComingSoon } =
-    useGetComingSoonQuery()
+  const {
+    data: onSale,
+    isLoading: loadingOnSale,
+    isError: errorOnSale
+  } = useGetOnSaleQuery()
+  const {
+    data: comingSoon,
+    isLoading: loadingComingSoon,
+    isError: errorComingSoon
+  } = useGetComingSoonQuery()
+
+  if (errorOnSale || errorComingSoon) {
+    return (
+      <Message>
+        Não foi possível carregar os jogos. Tente novamente mais tarde.
+      </Message>
+    )
+  }
 
   return (
     <>

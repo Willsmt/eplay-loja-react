@@ -19,7 +19,6 @@ import { getTotalPrice } from '../../utils/getTotalPrice'
 
 type Installment = {
   quantity: number
-  amount: number
   formattedAmount: string
 }
 
@@ -204,7 +203,6 @@ const Checkout = () => {
     for (let i = 1; i <= 6; i++) {
       installmentsArray.push({
         quantity: i,
-        amount: totalPrice / i,
         formattedAmount: formatPrice(totalPrice / i)
       })
     }

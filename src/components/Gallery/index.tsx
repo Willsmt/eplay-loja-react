@@ -1,6 +1,6 @@
 import Section from '../Section'
 import { Items, Item, Action, Modal, ModalContent } from './styles'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import play from '../../assets/images/botao-play_1.png'
 import zoom from '../../assets/images/mais_zoom_1.png'
@@ -33,6 +33,14 @@ const Gallery = ({ defaultCover, name, gallery }: Props) => {
     return play
   }
 
+  const openModal = (media: GalleryItem) => {
+    setModal({
+      isVisible: true,
+      type: media.type,
+      url: media.url
+    })
+  }
+
   const closeModal = () => {
     setModal({
       isVisible: false,
@@ -41,6 +49,20 @@ const Gallery = ({ defaultCover, name, gallery }: Props) => {
     })
   }
 
+  // fecha o modal ao apertar Esc enquanto ele está aberto
+  useEffect(() => {
+    if (!modal.isVisible) return
+
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setModal({ isVisible: false, type: 'image', url: '' })
+      }
+    }
+
+    document.addEventListener('keydown', handleEsc)
+    return () => document.removeEventListener('keydown', handleEsc)
+  }, [modal.isVisible])
+
   return (
     <>
       <Section background="black" title="Galeria">
@@ -48,31 +70,36 @@ const Gallery = ({ defaultCover, name, gallery }: Props) => {
           {gallery.map((media, index) => (
             <Item
               key={media.url}
-              onClick={() =>
-                setModal({
-                  isVisible: true,
-                  type: media.type,
-                  url: media.url
-                })
-              }
+              role="button"
+              tabIndex={0}
+              aria-label={`Abrir mídia ${index + 1} de ${name}`}
+              onClick={() => openModal(media)}
+              onKeyDown={event => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault()
+                  openModal(media)
+                }
+              }}
             >
               <img
                 src={getMediaCover(media)}
                 alt={`Mídia ${index + 1} de ${name}`}
               />
               <Action>
-                <img src={getMediaIcon(media)} alt="Ícone de ação da mídia" />
+                <img src={getMediaIcon(media)} alt="" />
               </Action>
             </Item>
           ))}
         </Items>
       </Section>
 
-      <Modal className={modal.isVisible ? 'Visible' : ''}>
+      <Modal className={modal.isVisible ? 'visible' : ''}>
         <ModalContent className="container">
           <header>
             <h4>{name}</h4>
-            <img src={close} alt="Fechar" onClick={closeModal} />
+            <button type="button" onClick={closeModal} aria-label="Fechar">
+              <img src={close} alt="" />
+            </button>
           </header>
 
           {modal.type === 'image' ? (

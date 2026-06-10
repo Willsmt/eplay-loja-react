@@ -34,6 +34,7 @@ export const Action = styled.div`
 export const Item = styled.li`
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 
   > img {
     border: 2px solid ${colors.white};
@@ -74,7 +75,7 @@ export const Modal = styled.div`
   align-items: center;
   justify-content: center;
 
-  &.Visible {
+  &.visible {
     display: flex; /* aparece quando a classe é adicionada */
   }
 
@@ -96,6 +97,13 @@ export const ModalContent = styled.div`
     display: flex;
     justify-content: space-between;
     margin-bottom: 24px;
+
+    button {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
 
     img {
       height: 16px;

@@ -1,10 +1,10 @@
+import { type ReactNode } from 'react'
 import { Container, Title } from './styles'
-import React from 'react'
 
 export type Props = {
   title: string
   background: 'black' | 'gray'
-  children: React.ReactNode
+  children: ReactNode
 }
 
 const Section = ({ title, background, children }: Props) => (

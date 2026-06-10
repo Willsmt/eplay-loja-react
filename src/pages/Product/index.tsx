@@ -4,13 +4,22 @@ import Hero from '../../components/Hero'
 import Section from '../../components/Section'
 import { useGetGameQuery } from '../../services/api'
 import Loader from '../../components/Loader'
+import Message from '../../components/Message'
 
 const Product = () => {
   const { id } = useParams<{ id: string }>()
-  const { data: game, isLoading } = useGetGameQuery(id ?? '', { skip: !id })
+  const {
+    data: game,
+    isLoading,
+    isError
+  } = useGetGameQuery(id ?? '', { skip: !id })
 
-  if (isLoading || !game) {
+  if (isLoading) {
     return <Loader />
+  }
+
+  if (isError || !game) {
+    return <Message>Não foi possível carregar este jogo.</Message>
   }
 
   return (

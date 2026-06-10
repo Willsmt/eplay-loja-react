@@ -1,15 +1,20 @@
 import Tag from '../Tag'
 import Button from '../Button'
 import Loader from '../Loader'
+import Message from '../Message'
 import { Image, Title, Price } from './styles'
 import { formatPrice } from '../../utils/formatPrice'
 import { useGetFeaturedQuery } from '../../services/api'
 
 const Banner = () => {
-  const { data: featured, isLoading } = useGetFeaturedQuery()
+  const { data: featured, isLoading, isError } = useGetFeaturedQuery()
 
-  if (isLoading || !featured) {
+  if (isLoading) {
     return <Loader />
+  }
+
+  if (isError || !featured) {
+    return <Message>Não foi possível carregar o destaque do dia.</Message>
   }
 
   return (

@@ -41,7 +41,6 @@ const ProductList = ({ background, title, games, isLoading, id }: Props) => {
     <Container id={id} background={background}>
       <div className="container">
         <Title>{title}</Title>
-        {isLoading && <p>Carregando...</p>}
 
         {isMobile ? (
           <Swiper
