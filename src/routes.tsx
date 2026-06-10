@@ -5,6 +5,8 @@ import Categories from './pages/Categories'
 import Product from './pages/Product'
 import Checkout from './pages/Checkout'
 
+// Mapa de rotas da SPA. Cada <Route> liga um caminho da URL a uma página.
+// ":id" é um parâmetro dinâmico, lido na página com useParams().
 const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<Home />} />

@@ -1,3 +1,6 @@
+// Camada de dados com RTK Query: declaramos os endpoints e a lib gera, de graça,
+// hooks com cache, loading e erro (ex.: useGetOnSaleQuery). Evita fetch + useState
+// + useEffect na mão para cada requisição.
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { categoriesConfig } from '../config/categoriesConfig'
 
@@ -72,12 +75,15 @@ export const api = createApi({
         return { data }
       }
     }),
+    // recebe o id do jogo e monta a URL dinâmica (ex.: jogos/123)
     getGame: builder.query<Game, string>({
       query: id => `jogos/${id}`
     }),
     getFeatured: builder.query<Game, void>({
       query: () => 'destaque'
     }),
+    // mutation = operação que ALTERA dados no servidor (POST do checkout).
+    // diferente das queries (GET), é disparada manualmente: usePurchaseMutation()
     purchase: builder.mutation<PurchaseResponse, PurchasePayload>({
       query: body => ({
         url: 'checkout',
